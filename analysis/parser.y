@@ -90,7 +90,9 @@ ReturnStatement: RETKW Expression StatementDelimiter;
 Expression:	ArithmeticExpression;
 AtomicExpression:	Variable { $$ = new_variable_expression($1); }
 			| Literal { $$ = new_literal_expression($1); }
-			| FunctionCall;
+			| FunctionCall
+			| LPAREN ArithmeticExpression RPAREN { $$ = $2; };
+
 Literal:	INTLIT { $$ = new_int_literal($1); }
 		| STRLIT { $$ = new_str_literal($1); };
 
