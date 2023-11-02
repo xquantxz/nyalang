@@ -25,6 +25,8 @@ LETTER [a-zA-Z]
     cur_line++;
     }
 
+\/\/[^\n]* { /*comment*/ }
+
 
 "func" { yylval.token.line = cur_line; return FUNCKW; }
 "if" { yylval.token.line = cur_line; return IFKW; }
