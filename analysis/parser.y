@@ -31,6 +31,7 @@ void yyerror(NyaProgram **program, const char *msg);
 %token <token> PLUSOP
 %token <token> MINUSOP
 %token <token> MULOP
+%token <token> COLON
 %token <token> DIVOP
 %token <token> EQOP
 %token <token> NEQOP
@@ -64,16 +65,17 @@ DeclarationStatementList: /*epsilon*/ { $$ = NULL; }
 			| DeclarationStatement DeclarationStatementList { $$ = new_statement_list($1, $2); };
 DeclarationStatement:	FunctionDeclaration | VariableDeclaration;
 
-VariableDeclaration:	VARKW Variable StatementDelimiter { $$ = new_vardecl_statement($2, NULL); }
+VariableDeclaration:	VARKW Variable COLON Type StatementDelimiter { $$ = new_vardecl_statement($2, NULL); }
 			| VARKW AssignmentStatement { $$ = new_vardecl_statement($2->content.assignment.var, $2->content.assignment.exp); };
-FunctionDeclaration:	FUNCKW Variable LPAREN OptionalParamList RPAREN LBRACE StatementList RBRACE { $$ = new_funcdecl_statement($2, $7); };
+FunctionDeclaration:	FUNCKW Variable LPAREN OptionalParamList RPAREN LBRACE StatementList RBRACE { $$ = new_funcdecl_statement($2, $7); }
+		   |	FUNCKW Variable LPAREN OptionalParamList RPAREN COLON Type LBRACE StatementList RBRACE { $$ = new_funcdecl_statement($2, $9); };
 
 StatementList: /*epsilon*/ { $$ = NULL; }
 	     | Statement StatementList { $$ = new_statement_list($1, $2); };
 
 OptionalParamList:	/*epsilon*/ | ParamList;
 ParamList:	Param | Param COMMA ParamList;
-Param:	IDENT;
+Param:	Variable COLON Type;
 
 Statement:	SingleStatement;
 
@@ -95,6 +97,7 @@ AtomicExpression:	Variable { $$ = new_variable_expression($1); }
 
 Literal:	INTLIT { $$ = new_int_literal($1); }
 		| STRLIT { $$ = new_str_literal($1); };
+Type:		IDENT;
 
 FunctionCall:	Variable LPAREN RPAREN { $$ = new_call_expression($1); };
 Variable:	IDENT { $$ = new_variable($1); };

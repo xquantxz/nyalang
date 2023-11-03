@@ -38,6 +38,7 @@ LETTER [a-zA-Z]
 ")" { yylval.token.line = cur_line; return RPAREN; }
 "{" { yylval.token.line = cur_line; return LBRACE; }
 "}" { yylval.token.line = cur_line; return RBRACE; }
+":" { yylval.token.line = cur_line; return COLON; }
 ";" { yylval.token.line = cur_line; return SEMICLN; }
 "," { yylval.token.line = cur_line; return COMMA; }
 "=" { yylval.token.line = cur_line; return ASSIGN;}
