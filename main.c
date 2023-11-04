@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ast_tools.h"
-#include "y.tab.h"
+#include "analysis/ast_tools.h"
+#include "analysis/y.tab.h"
 
 extern FILE *yyin;
 extern size_t cur_line;
