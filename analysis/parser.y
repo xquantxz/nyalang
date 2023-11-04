@@ -38,6 +38,7 @@ void yyerror(NyaProgram **program, const char *msg);
 %token <token> OROP
 %token <token> ANDOP
 %token <token> NEGOP
+%token <token> GTOP LTOP GTEOP LTEOP
 %token <identToken> IDENT
 %token <intToken> INTLIT
 %token <strToken> STRLIT
@@ -48,7 +49,7 @@ void yyerror(NyaProgram **program, const char *msg);
 %token <token> RETKW
 %token <token> ERR
 
-%type <expression> Expression AtomicExpression ArithmeticExpression PlusMinusExpression MultDivExpression FunctionCall
+%type <expression> Expression AtomicExpression PlusMinusExpression MultDivExpression BooleanExpression FunctionCall
 %type <statement> Statement DeclarationStatement VariableDeclaration FunctionDeclaration AssignmentStatement SingleStatement FunctionCallStatement
 %type <literal> Literal
 %type <variable> Variable
@@ -89,11 +90,11 @@ ElseStatement: ELSEKW Statement;
 
 ReturnStatement: RETKW Expression StatementDelimiter;
 
-Expression:	ArithmeticExpression;
+Expression:	PlusMinusExpression;
 AtomicExpression:	Variable { $$ = new_variable_expression($1); }
 			| Literal { $$ = new_literal_expression($1); }
 			| FunctionCall
-			| LPAREN ArithmeticExpression RPAREN { $$ = $2; };
+			| LPAREN Expression RPAREN { $$ = $2; };
 
 Literal:	INTLIT { $$ = new_int_literal($1); }
 		| STRLIT { $$ = new_str_literal($1); };
@@ -101,12 +102,18 @@ Type:		IDENT;
 
 FunctionCall:	Variable LPAREN RPAREN { $$ = new_call_expression($1); };
 Variable:	IDENT { $$ = new_variable($1); };
-ArithmeticExpression:	PlusMinusExpression;
 PlusMinusExpression:	PlusMinusExpression PLUSOP MultDivExpression { $$ = new_binary_expression($1, $3, EO_ADD); }
 			| PlusMinusExpression MINUSOP MultDivExpression { $$ = new_binary_expression($1, $3, EO_SUB); }
 			| MultDivExpression;
-MultDivExpression:	MultDivExpression MULOP AtomicExpression { $$ = new_binary_expression($1, $3, EO_MUL); }
-			| MultDivExpression DIVOP AtomicExpression { $$ = new_binary_expression($1, $3, EO_DIV); }
+MultDivExpression:	MultDivExpression MULOP BooleanExpression { $$ = new_binary_expression($1, $3, EO_MUL); }
+			| MultDivExpression DIVOP BooleanExpression { $$ = new_binary_expression($1, $3, EO_DIV); }
+			| BooleanExpression;
+BooleanExpression:	BooleanExpression ANDOP AtomicExpression { $$ = new_binary_expression($1, $3, EO_AND); }
+			| BooleanExpression OROP AtomicExpression { $$ = new_binary_expression($1, $3, EO_OR); }
+			| BooleanExpression GTOP AtomicExpression { $$ = new_binary_expression($1, $3, EO_GT); }
+			| BooleanExpression LTOP AtomicExpression { $$ = new_binary_expression($1, $3, EO_LT); }
+			| BooleanExpression GTEOP AtomicExpression { $$ = new_binary_expression($1, $3, EO_GTE); }
+			| BooleanExpression LTEOP AtomicExpression { $$ = new_binary_expression($1, $3, EO_LTE); }
 			| AtomicExpression;
 
 StatementDelimiter:	SEMICLN;

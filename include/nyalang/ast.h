@@ -45,6 +45,12 @@ typedef enum {
     EO_SUB,
     EO_MUL,
     EO_DIV,
+    EO_AND,
+    EO_OR,
+    EO_GT,
+    EO_LT,
+    EO_GTE,
+    EO_LTE,
 } ExpressionOp;
 
 typedef enum {

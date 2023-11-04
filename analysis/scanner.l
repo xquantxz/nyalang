@@ -52,6 +52,10 @@ LETTER [a-zA-Z]
 "||" { yylval.token.line = cur_line; return OROP; }
 "&&" { yylval.token.line = cur_line; return ANDOP; }
 "!" { yylval.token.line = cur_line; return NEGOP; }
+">" { yylval.token.line = cur_line; return GTOP; }
+"<" { yylval.token.line = cur_line; return LTOP; }
+">=" { yylval.token.line = cur_line; return GTEOP; }
+"<=" { yylval.token.line = cur_line; return LTEOP; }
 
 {DIGIT}+ {
 	    yylval.intToken.line = cur_line;
