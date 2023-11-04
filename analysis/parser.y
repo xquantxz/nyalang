@@ -17,6 +17,7 @@ void yyerror(NyaProgram **program, const char *msg);
     Expression *expression;
     Literal *literal;
     Variable *variable;
+    TypeExpression *type;
     Statement *statement;
     StatementList *statement_list;
 }
@@ -53,6 +54,7 @@ void yyerror(NyaProgram **program, const char *msg);
 %type <statement> Statement DeclarationStatement VariableDeclaration FunctionDeclaration AssignmentStatement SingleStatement FunctionCallStatement
 %type <literal> Literal
 %type <variable> Variable
+%type <type> TypeExpression
 %type <statement_list> NyaProgram StatementList DeclarationStatementList
 
 %parse-param {NyaProgram **program}
@@ -66,17 +68,17 @@ DeclarationStatementList: /*epsilon*/ { $$ = NULL; }
 			| DeclarationStatement DeclarationStatementList { $$ = new_statement_list($1, $2); };
 DeclarationStatement:	FunctionDeclaration | VariableDeclaration;
 
-VariableDeclaration:	VARKW Variable COLON Type StatementDelimiter { $$ = new_vardecl_statement($2, NULL); }
-			| VARKW AssignmentStatement { $$ = new_vardecl_statement($2->content.assignment.var, $2->content.assignment.exp); };
-FunctionDeclaration:	FUNCKW Variable LPAREN OptionalParamList RPAREN LBRACE StatementList RBRACE { $$ = new_funcdecl_statement($2, $7); }
-		   |	FUNCKW Variable LPAREN OptionalParamList RPAREN COLON Type LBRACE StatementList RBRACE { $$ = new_funcdecl_statement($2, $9); };
+VariableDeclaration:	VARKW Variable COLON TypeExpression StatementDelimiter { $$ = new_vardecl_statement($2, $4, NULL); }
+			| VARKW Variable COLON TypeExpression ASSIGN Expression StatementDelimiter { $$ = new_vardecl_statement($2, $4, $6); };
+FunctionDeclaration:	FUNCKW Variable LPAREN OptionalParamList RPAREN LBRACE StatementList RBRACE { $$ = new_funcdecl_statement($2, new_void_type_expression(),$7); }
+		   |	FUNCKW Variable LPAREN OptionalParamList RPAREN COLON TypeExpression LBRACE StatementList RBRACE { $$ = new_funcdecl_statement($2, $7, $9); };
 
 StatementList: /*epsilon*/ { $$ = NULL; }
 	     | Statement StatementList { $$ = new_statement_list($1, $2); };
 
 OptionalParamList:	/*epsilon*/ | ParamList;
 ParamList:	Param | Param COMMA ParamList;
-Param:	Variable COLON Type;
+Param:	Variable COLON TypeExpression;
 
 Statement:	SingleStatement;
 
@@ -98,7 +100,7 @@ AtomicExpression:	Variable { $$ = new_variable_expression($1); }
 
 Literal:	INTLIT { $$ = new_int_literal($1); }
 		| STRLIT { $$ = new_str_literal($1); };
-Type:		IDENT;
+TypeExpression:	IDENT { $$ = new_primitive_type_expression($1); };
 
 FunctionCall:	Variable LPAREN RPAREN { $$ = new_call_expression($1); };
 Variable:	IDENT { $$ = new_variable($1); };

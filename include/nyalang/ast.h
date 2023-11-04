@@ -41,6 +41,20 @@ typedef struct literal {
 } Literal;
 
 typedef enum {
+    TK_PRIMITIVE,
+    TK_VOID,
+} TypeKind;
+
+typedef struct type_expression {
+    TypeKind kind;
+    union {
+	struct {
+	    char *name;
+	} primitive;
+    } content;
+} TypeExpression;
+
+typedef enum {
     EO_ADD,
     EO_SUB,
     EO_MUL,
@@ -75,7 +89,6 @@ typedef struct expression {
     } content;
 } Expression;
 
-
 typedef enum {
     ST_ASSIGN,
     ST_FUNCDECL,
@@ -93,11 +106,13 @@ typedef struct statement {
 
 	struct {
 	    Variable *func;
+	    TypeExpression *type;
 	    struct statment_list *body;
 	} function_declaration;
 
 	struct {
 	    Variable *var;
+	    TypeExpression *type;
 	    Expression *opt_exp;
 	} variable_declaration;
 
