@@ -22,7 +22,7 @@ lex.yy.c:
 
 clean:
 	rm -rf y.tab.h y.tab.c *.o *.gv nyaparser
-	rm -rf lex.yy.c libnlex.a libnparse.a
+	rm -rf lex.yy.c *.a
 
 .PHONY: clean src nyaparser sym_header
 

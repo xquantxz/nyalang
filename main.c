@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <nyalang/semantic.h>
+#include <nyalang/symtable.h>
 #include "analysis/ast_tools.h"
 #include "analysis/y.tab.h"
+#include "include/nyalang/semantic.h"
+#include "include/nyalang/symtable.h"
+
 
 extern FILE *yyin;
 extern size_t cur_line;
@@ -46,6 +51,10 @@ int main(int argc, char **argv)
     } else {
 	puts("program NOT recognized");
     }
+
+    SymbolTable *symtable = new_symtable();
+
+    collect_decls(program, symtable);
 
     fclose(yyin);
     return 0;

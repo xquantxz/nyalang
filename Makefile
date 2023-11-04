@@ -1,15 +1,23 @@
 CFLAGS := -g -DDEBUG_AST
+
+ifeq ($(shell pkg-config --exists glib-2.0; echo $$?), 0)
+	CFLAGS += $(shell pkg-config --cflags glib-2.0)
+	LDFLAGS += $(shell pkg-config --libs glib-2.0)
+else
+	ERR := $(error GLib is not installed)
+endif
+
 export CFLAGS
 
 PHONY := all
 all: compiler
 
-PHONY += analysis
-analysis:
+PHONY += analysis semantic
+analysis semantic:
 	$(MAKE) -C $@
 
-compiler: analysis main.c
-	$(CC) main.c analysis/*.a -Iinclude $(CFLAGS) -o nyac
+compiler: analysis semantic main.c
+	$(CC) main.c analysis/*.a semantic/*.a $(LDFLAGS) -Iinclude $(CFLAGS) -o nyac
 
 PHONY += clean
 clean:
