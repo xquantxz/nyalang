@@ -36,6 +36,7 @@ typedef struct {
 FunctionInfo *new_function_info(char *name, char *returnType);
 VariableInfo *new_variable_info(char *name, char *type);
 void symtable_insert_variable(SymbolTable *st, char *ident, VariableInfo *info);
+void symtable_insert_function(SymbolTable *st, char *ident, FunctionInfo *info);
 
 #endif
 

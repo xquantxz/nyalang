@@ -16,13 +16,14 @@ static void collect_stmt_decls(Statement *stmt, SymbolTable *st)
     case ST_FUNCDECL:
     {
 	char *name = stmt->content.function_declaration.func->name;
-	FunctionInfo *info = new_variable_info(name, "type");
+	FunctionInfo *info = new_function_info(name, "type");
 	symtable_insert_function(st, name, info);
 
 	collect_stmt_list_decls(stmt->content.function_declaration.body, st);
 	break;
     }
     default:
+	break;
     }
 }
 

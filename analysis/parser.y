@@ -6,6 +6,7 @@
 #include "ast_tools.h"
 
 void yyerror(NyaProgram **program, const char *msg);
+int yylex(void);
 
 %}
 
