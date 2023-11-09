@@ -72,19 +72,19 @@ Literal *new_str_literal(StrToken token)
     return lit;
 }
 
-TypeExpression *new_primitive_type_expression(IdentToken token)
+TypeExpression *new_ident_type_expression(IdentToken token)
 {
-    TypeExpression *type = ALLOC(TypeExpression);
-    type->kind = TK_PRIMITIVE;
-    type->content.primitive.name = token.name;
-    return type;
+    TypeExpression *typeExp = ALLOC(TypeExpression);
+    typeExp->kind = TEK_IDENT;
+    typeExp->content.ident = (IdentToken)token;
+    return typeExp;
 }
 
 TypeExpression *new_void_type_expression(void)
 {
-    TypeExpression *type = ALLOC(TypeExpression);
-    type->kind = TK_VOID;
-    return type;
+    TypeExpression *typeExp = ALLOC(TypeExpression);
+    typeExp->kind = TEK_VOID;
+    return typeExp;
 }
 
 Variable *new_variable(IdentToken token)
@@ -104,24 +104,24 @@ Statement *new_assign_statment(Variable *var, Expression *exp)
     return stmt;
 }
 
-Statement *new_vardecl_statement(Variable *var, TypeExpression *type, Expression *opt_exp)
+Statement *new_vardecl_statement(Variable *var, TypeExpression *typeExp, Expression *opt_exp)
 {
     Statement *stmt = ALLOC(Statement);
 
     stmt->type = ST_VARDECL;
     stmt->content.variable_declaration.var = var;
-    stmt->content.variable_declaration.type = type;
+    stmt->content.variable_declaration.typeExp = typeExp;
     stmt->content.variable_declaration.opt_exp = opt_exp;
     return stmt;
 }
 
-Statement *new_funcdecl_statement(Variable *func, TypeExpression *type, StatementList *body)
+Statement *new_funcdecl_statement(Variable *func, TypeExpression *typeExp, StatementList *body)
 {
     Statement *stmt = ALLOC(Statement);
 
     stmt->type = ST_FUNCDECL;
     stmt->content.function_declaration.func = func;
-    stmt->content.function_declaration.type = type;
+    stmt->content.function_declaration.typeExp = typeExp;
     stmt->content.function_declaration.body = body;
     return stmt;
 }

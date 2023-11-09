@@ -101,7 +101,7 @@ AtomicExpression:	Variable { $$ = new_variable_expression($1); }
 
 Literal:	INTLIT { $$ = new_int_literal($1); }
 		| STRLIT { $$ = new_str_literal($1); };
-TypeExpression:	IDENT { $$ = new_primitive_type_expression($1); };
+TypeExpression:	IDENT { $$ = new_ident_type_expression($1); };
 
 FunctionCall:	Variable LPAREN RPAREN { $$ = new_call_expression($1); };
 Variable:	IDENT { $$ = new_variable($1); };

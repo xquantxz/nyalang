@@ -41,16 +41,19 @@ typedef struct literal {
 } Literal;
 
 typedef enum {
-    TK_PRIMITIVE,
-    TK_VOID,
-} TypeKind;
+    TEK_IDENT,
+    TEK_ARRAY,
+    TEK_VOID
+} TypeExpressionKind;
 
 typedef struct type_expression {
-    TypeKind kind;
+    TypeExpressionKind kind;
     union {
+	IdentToken ident;
 	struct {
-	    char *name;
-	} primitive;
+	    struct type_expression *typeExp;
+	    size_t length;
+	} array;
     } content;
 } TypeExpression;
 
@@ -106,13 +109,13 @@ typedef struct statement {
 
 	struct {
 	    Variable *func;
-	    TypeExpression *type;
+	    TypeExpression *typeExp;
 	    struct statment_list *body;
 	} function_declaration;
 
 	struct {
 	    Variable *var;
-	    TypeExpression *type;
+	    TypeExpression *typeExp;
 	    Expression *opt_exp;
 	} variable_declaration;
 
