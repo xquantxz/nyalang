@@ -25,6 +25,8 @@ int yylex(void);
 
 %token <token> LPAREN
 %token <token> RPAREN
+%token <token> LBRACK
+%token <token> RBRACK
 %token <token> LBRACE
 %token <token> RBRACE
 %token <token> SEMICLN
@@ -101,7 +103,8 @@ AtomicExpression:	Variable { $$ = new_variable_expression($1); }
 
 Literal:	INTLIT { $$ = new_int_literal($1); }
 		| STRLIT { $$ = new_str_literal($1); };
-TypeExpression:	IDENT { $$ = new_ident_type_expression($1); };
+TypeExpression:	IDENT { $$ = new_ident_type_expression($1); }
+	      | LBRACK TypeExpression SEMICLN INTLIT RBRACK { $$ = new_array_type_expression($2, $4); };
 
 FunctionCall:	Variable LPAREN RPAREN { $$ = new_call_expression($1); };
 Variable:	IDENT { $$ = new_variable($1); };

@@ -36,6 +36,8 @@ LETTER [a-zA-Z]
 
 "(" { yylval.token.line = cur_line; return LPAREN; }
 ")" { yylval.token.line = cur_line; return RPAREN; }
+"[" { yylval.token.line = cur_line; return LBRACK; }
+"]" { yylval.token.line = cur_line; return RBRACK; }
 "{" { yylval.token.line = cur_line; return LBRACE; }
 "}" { yylval.token.line = cur_line; return RBRACE; }
 ":" { yylval.token.line = cur_line; return COLON; }

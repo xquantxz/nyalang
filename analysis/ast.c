@@ -80,6 +80,15 @@ TypeExpression *new_ident_type_expression(IdentToken token)
     return typeExp;
 }
 
+TypeExpression *new_array_type_expression(TypeExpression *exp, IntToken lenTok)
+{
+    TypeExpression *typeExp = ALLOC(TypeExpression);
+    typeExp->kind = TEK_ARRAY;
+    typeExp->content.array.typeExp = exp;
+    typeExp->content.array.length = lenTok.value;
+    return typeExp;
+}
+
 TypeExpression *new_void_type_expression(void)
 {
     TypeExpression *typeExp = ALLOC(TypeExpression);

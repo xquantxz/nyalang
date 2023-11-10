@@ -11,6 +11,7 @@ Expression *new_call_expression(Variable *func);
 Literal *new_int_literal(IntToken token);
 Literal *new_str_literal(StrToken token);
 TypeExpression *new_ident_type_expression(IdentToken token);
+TypeExpression *new_array_type_expression(TypeExpression *exp, IntToken lenTok);
 TypeExpression *new_void_type_expression(void);
 Variable *new_variable(IdentToken token);
 Statement *new_assign_statment(Variable *var, Expression *exp);
