@@ -1,5 +1,8 @@
 .*
+!.github/
+
 *.[oa]
+
 lex.yy.c
 y.tab.[ch]
 nyac

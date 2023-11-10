@@ -1,0 +1,15 @@
+name: Tests
+on: push
+jobs:
+  run-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v4
+      - name: Update package index
+        run: sudo apt update
+      - name: Install build dependencies
+        run: sudo apt install make yacc bison -y
+      - name: Build nyalang compiler
+        run: make
+
