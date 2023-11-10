@@ -29,10 +29,11 @@ static void collect_stmt_decls(Statement *stmt, SymbolTable *st)
 
 static void collect_stmt_list_decls(StatementList *list, SymbolTable *st)
 {
-    do {
+    while (list != NULL) {
 	Statement *stmt = list->self;
 	collect_stmt_decls(stmt, st);
-    } while ((list = list->next) != NULL);
+	list = list->next;
+    }
 }
 
 void collect_decls(NyaProgram *ast, SymbolTable *st)
