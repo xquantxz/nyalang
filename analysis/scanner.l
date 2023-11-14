@@ -17,16 +17,20 @@ void lexical_error(size_t line, char *msg);
 DIGIT [0-9]
 LETTER [a-zA-Z]
 
+%x COMMENT
+
 %%
 
 [\r\t\ ] {  }
 
-\n {
+<*>\n {
     cur_line++;
     }
 
+\/\* BEGIN(COMMENT);
+<COMMENT>\*\/ BEGIN(INITIAL);
+<COMMENT>. { }
 \/\/[^\n]* { /*comment*/ }
-
 
 "func" { yylval.token.line = cur_line; return FUNCKW; }
 "if" { yylval.token.line = cur_line; return IFKW; }
