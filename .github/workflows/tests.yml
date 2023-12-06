@@ -9,7 +9,7 @@ jobs:
       - name: Update package index
         run: sudo apt update
       - name: Install build dependencies
-        run: sudo apt install make yacc bison -y
+        run: sudo apt install make yacc bison libglib2.0-dev -y
       - name: Build nyalang compiler
         run: make
 
