@@ -1,5 +1,5 @@
 CFLAGS += -I../include
-OBJS := symtable.o collect.o
+OBJS := symtable.o collect.o ../type.o
 
 __all: libnsem.a
 

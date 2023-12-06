@@ -6,21 +6,25 @@
 #include <gmodule.h>
 #include <gio/gio.h>
 
-typedef struct {
-    GHashTable *entries;
-} VariableSymbolTable;
+#include <nyalang/type.h>
 
 typedef struct {
     GHashTable *entries;
-} FunctionSymbolTable;
-
-typedef struct {
-    struct SymbolTable *parent;
-    FunctionSymbolTable func_symtable;
-    VariableSymbolTable var_symtable;
 } SymbolTable;
 
-SymbolTable *new_symtable(void);
+typedef SymbolTable FunctionSymbolTable;
+typedef SymbolTable VariableSymbolTable;
+typedef SymbolTable TypeSymbolTable;
+
+typedef struct {
+    struct ScopeSymbolTable *parent;
+    FunctionSymbolTable func_symtable;
+    VariableSymbolTable var_symtable;
+    TypeSymbolTable type_symtable;
+} ScopeSymbolTable;
+
+ScopeSymbolTable *new_symtable(void);
+ScopeSymbolTable *new_root_symtable(void);
 
 typedef struct {
     char *name;
@@ -30,13 +34,23 @@ typedef struct {
 
 typedef struct {
     char *name;
-    char *type;
+    Type *type;
 } VariableInfo;
 
+typedef struct {
+    char *name;
+    Type *type;
+} TypeInfo;
+
 FunctionInfo *new_function_info(char *name, char *returnType);
-VariableInfo *new_variable_info(char *name, char *type);
-void symtable_insert_variable(SymbolTable *st, char *ident, VariableInfo *info);
-void symtable_insert_function(SymbolTable *st, char *ident, FunctionInfo *info);
+VariableInfo *new_variable_info(char *name, Type *type);
+TypeInfo *new_type_info(char *name, Type *type);
+void symtable_insert_variable(ScopeSymbolTable *st, char *ident, VariableInfo *info);
+void symtable_insert_function(ScopeSymbolTable *st, char *ident, FunctionInfo *info);
+void symtable_insert_type(ScopeSymbolTable *st, char *ident, TypeInfo *info);
+
+/* lookup */
+TypeInfo *lookup_type_symtable(ScopeSymbolTable *st, char *name);
 
 #endif
 

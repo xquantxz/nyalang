@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 	puts("program NOT recognized");
     }
 
-    SymbolTable *symtable = new_symtable();
+    ScopeSymbolTable *symtable = new_root_symtable();
 
     collect_decls(program, symtable);
 

@@ -4,7 +4,7 @@
 #include <nyalang/ast.h>
 #include <nyalang/symtable.h>
 
-void collect_decls(NyaProgram *ast, SymbolTable *symtable);
+void collect_decls(NyaProgram *ast, ScopeSymbolTable *symtable);
 
 #endif
 
